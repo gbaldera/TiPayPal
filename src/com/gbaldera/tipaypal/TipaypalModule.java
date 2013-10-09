@@ -41,6 +41,7 @@ public class TipaypalModule extends KrollModule implements TiActivityResultHandl
 	private String client_id;
 	private String receiver_email;
 	private String environment;
+	private Boolean skip_credit_card;
 
 	// constants
 	@Kroll.constant public static final String PARAM_ENVIRONMENT = "environment";
@@ -52,7 +53,7 @@ public class TipaypalModule extends KrollModule implements TiActivityResultHandl
 	@Kroll.constant public static final String PARAM_DESCRIPTION = "description";
 	@Kroll.constant public static final String PARAM_SKIP_CREDIT_CARD = "skip_credit_card";
 
-	@Kroll.constant public static final String EVENT_OK = "ok";
+	@Kroll.constant public static final String EVENT_COMPLETED = "completed";
 	@Kroll.constant public static final String EVENT_ERROR = "error";
 	@Kroll.constant public static final String EVENT_CANCELLED = "cancelled";
 	@Kroll.constant public static final String EVENT_PAYMENT_INVALID = "paymentinvalid";
@@ -92,6 +93,7 @@ public class TipaypalModule extends KrollModule implements TiActivityResultHandl
         client_id = TiConvert.toString(dict, PARAM_CLIENT_ID);
         receiver_email = TiConvert.toString(dict, PARAM_RECEIVER_EMAIL);
         environment = TiConvert.toString(dict, PARAM_ENVIRONMENT);
+        skip_credit_card = TiConvert.toBoolean(dict, PARAM_SKIP_CREDIT_CARD, false);
 
         if(environment == null)
         {
@@ -162,10 +164,7 @@ public class TipaypalModule extends KrollModule implements TiActivityResultHandl
         intent.putExtra(PaymentActivity.EXTRA_RECEIVER_EMAIL, receiver_email);
 
         // disable credit card acceptance ?
-        if(params.containsKey(PARAM_SKIP_CREDIT_CARD))
-        {
-            intent.putExtra(PaymentActivity.EXTRA_SKIP_CREDIT_CARD, TiConvert.toBoolean(dict, PARAM_SKIP_CREDIT_CARD));
-        }
+        intent.putExtra(PaymentActivity.EXTRA_SKIP_CREDIT_CARD, skip_credit_card);
 
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
 
@@ -267,11 +266,11 @@ public class TipaypalModule extends KrollModule implements TiActivityResultHandl
 
     private void processResult(int resultCode, KrollDict confirmation) {
 
-        if (hasListeners(EVENT_OK)) {
+        if (hasListeners(EVENT_COMPLETED)) {
             HashMap<String, Object> dict = new HashMap<String, Object>();
             dict.put("code", resultCode);
             dict.put("confirmation", confirmation);
-            fireEvent(EVENT_OK, dict);
+            fireEvent(EVENT_COMPLETED, dict);
         }
     }
 }
