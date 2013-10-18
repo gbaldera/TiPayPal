@@ -44,12 +44,16 @@ List of methods supported in this module:
 
 Initialize the SDK.
 
-  tipaypal.initialize({
-      environment: tipaypal.ENVIRONMENT_NO_NETWORK,
-      skip_credit_card: true,
-      client_id: "<YOUR_CLIENT_ID>",
-      receiver_email: "<YOUR_PAYPAL_EMAIL_ADDRESS>"
-  });
+```
+
+tipaypal.initialize({
+    environment: tipaypal.ENVIRONMENT_NO_NETWORK,
+    skip_credit_card: true,
+    client_id: "<YOUR_CLIENT_ID>",
+    receiver_email: "<YOUR_PAYPAL_EMAIL_ADDRESS>"
+});
+
+```
 
 ##### Arguments
 
@@ -62,12 +66,16 @@ Initialize the SDK.
 
 Make a payment.
 
-  tipaypal.doPayment({
+```
+
+tipaypal.doPayment({
         amount: "8.75",
         currency: "USD",
         description: "hipster jeans",
         payer_id: "<someuser@somedomain.com>"
     });
+
+```
 
 ##### Arguments
 
